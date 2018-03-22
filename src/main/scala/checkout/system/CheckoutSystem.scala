@@ -3,9 +3,6 @@ package checkout.system
 import currency.BasketPrice
 import shopping.cart.BasketItem
 
-import scala.math.BigDecimal.RoundingMode.RoundingMode
-
-
 object CheckoutSystem {
   /*
     Build a checkout system which takes a list of items scanned at the till and outputs
@@ -29,10 +26,8 @@ object CheckoutSystem {
   ● Update your checkout functions accordingly
    */
 
-  def checkoutWithOffer(basket: List[BasketItem]): BigDecimal = {
-    val amountOfApples = basket.count(_.toString == "Apple")
-
-    val amountOfOranges = basket.count(_.toString == "Orange")
+  def checkoutWithOffer(basket: List[BasketItem], offer: List[Offer]): BigDecimal = {
+    val itemsWithCount = basket.toSet.map(item => (item, basket.count(_ == item)))
 
     0: BigDecimal
   }
