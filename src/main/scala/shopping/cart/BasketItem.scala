@@ -1,6 +1,6 @@
 package shopping.cart
 
-import currency.Currency
+import currency.Price
 /*
 You are building a checkout system for a shop which only sells apples and
 oranges.
@@ -12,12 +12,12 @@ the total cost
 candidates take a list of strings as input
 
  */
-sealed trait BasketItem[A] {
-  def price: A
+sealed trait BasketItem {
+  def price: Price
 }
 
-case class Apple[A: Numeric](price: A, currency: Currency) extends BasketItem[A]
+case class Apple(price: Price) extends BasketItem
 
-case class Orange[A: Numeric](price: A, currency: Currency) extends BasketItem[A]
+case class Orange(price: Price) extends BasketItem
 
 
