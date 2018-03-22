@@ -1,6 +1,7 @@
 package shopping.cart
 
-import currency.Price
+import currency.{Penny, Price}
+
 /*
 You are building a checkout system for a shop which only sells apples and
 oranges.
@@ -16,8 +17,8 @@ sealed trait BasketItem {
   def price: Price
 }
 
-case class Apple(price: Price) extends BasketItem
+case class Apple(price: Price = Penny(60)) extends BasketItem
 
-case class Orange(price: Price) extends BasketItem
+case class Orange(price: Price = Penny(25)) extends BasketItem
 
 
