@@ -8,6 +8,8 @@ case class Offer(item: BasketItem, eligibleNumberForItems: Int, itemsForFree: In
   require(eligibleNumberForItems > 0 && itemsForFree > 0)
 
   def applyOffer(amount: Int): ItemsLeftToPayCount = {
-    0
+    val countOfEligibleOffers = amount / eligibleNumberForItems
+
+    amount - countOfEligibleOffers * itemsForFree
   }
 }
