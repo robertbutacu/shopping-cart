@@ -1,9 +1,8 @@
 package checkout.system
 
 import currency.BasketPrice
-import shopping.cart.{Apple, BasketItem}
+import shopping.cart.BasketItem
 
-import scala.math.BigDecimal.RoundingMode
 import scala.math.BigDecimal.RoundingMode.RoundingMode
 
 
@@ -13,10 +12,14 @@ object CheckoutSystem {
     the total cost
     ● For example: [ Apple, Apple, Orange, Apple ] => £2.05
  */
-  def checkout(basket: List[BasketItem], roundingMode: RoundingMode): BigDecimal = {
+  def checkout(basket: List[BasketItem])(implicit round: Rounding): BigDecimal = {
     val basketPrice = basket.foldRight(BasketPrice())((curr, acc) => acc.add(curr))
 
-    basketPrice.toPounds.setScale(2, roundingMode)
+    round.scale match {
+      case None => basketPrice.toPounds
+      case Some(s) => basketPrice.toPounds.setScale(s, round.roundingMode)
+
+    }
   }
 
   /*
