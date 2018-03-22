@@ -7,8 +7,20 @@ import scala.math.BigDecimal.RoundingMode
 
 class CheckoutSystemSpec extends FlatSpec {
   implicit val rounding: Rounding = Rounding(RoundingMode.HALF_EVEN, Some(2))
+  val apple = Apple()
+  val orange = Orange()
+  val basket = List(apple, apple, orange, apple)
 
   "Given the example basket " should "return 2.05" in {
-    CheckoutSystem.checkout(List(Apple(), Apple(), Orange(), Apple())) === (2.05: BigDecimal)
+    CheckoutSystem.checkout(basket) === (2.05: BigDecimal)
+  }
+
+  //  ○ buy one, get one free on Apples
+  //○ 3 for the price of 2 on Oranges
+  "Given the example basket " should " return  after the discount " in {
+    val appleDiscount = Discount(apple, 1, 1)
+    val orangeDiscount = Discount(orange, 2, 1)
+
+    CheckoutSystem.checkoutWithOffer(basket, Set(appleDiscount, orangeDiscount)) === (1.45: BigDecimal)
   }
 }
