@@ -4,6 +4,9 @@ import currency.BasketPrice
 import shopping.cart.BasketItem
 
 object CheckoutSystem {
+  type ItemsLeftToPayCount = Int
+  type Amount = Int
+
   /*
     Build a checkout system which takes a list of items scanned at the till and outputs
     the total cost
@@ -26,9 +29,20 @@ object CheckoutSystem {
   ● Update your checkout functions accordingly
    */
 
-  def checkoutWithOffer(basket: List[BasketItem], offer: List[Offer]): BigDecimal = {
+  def checkoutWithOffer(basket: List[BasketItem], offer: Set[Offer])(implicit round: Rounding): BigDecimal = {
+    def tryToApplyDiscount(item: (BasketItem, Amount), discounts: Set[Offer]): ItemsLeftToPayCount = {
+      discounts find (_.item == item._1) match {
+        case None => item._2
+        case Some(d) => d.applyOffer(item._2)
+      }
+    }
+
     val itemsWithCount = basket.toSet.map(item => (item, basket.count(_ == item)))
 
-    0: BigDecimal
+    val eligibleDiscounts = offer filter basket.contains
+
+    val basketToPayAfterDiscount = itemsWithCount.map(i => (i._1, tryToApplyDiscount(i, eligibleDiscounts)))
+
+    checkout(basketToPayAfterDiscount.map(i => List.fill(i._2)(i._1)).toList.flatten)
   }
 }
