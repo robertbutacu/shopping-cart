@@ -1,5 +1,6 @@
 package checkout.system
 
+import currency.BasketPrice
 import shopping.cart.BasketItem
 
 /*
@@ -9,6 +10,8 @@ the total cost
  */
 object CheckoutSystem {
   def checkout[A: Numeric](basket: List[BasketItem]): BigDecimal = {
-    0:BigDecimal
+    val basketPrice = basket.foldRight(BasketPrice())((curr, acc) => acc.add(curr))
+
+    basketPrice.toPounds
   }
 }
