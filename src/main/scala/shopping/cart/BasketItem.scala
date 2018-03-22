@@ -17,8 +17,12 @@ sealed trait BasketItem {
   def price: Price
 }
 
-case class Apple(price: Price = Penny(60)) extends BasketItem
+case class Apple(price: Price = Penny(60)) extends BasketItem {
+  override def toString: String = "Apple"
+}
 
-case class Orange(price: Price = Penny(25)) extends BasketItem
+case class Orange(price: Price = Penny(25)) extends BasketItem {
+  override def toString: String = "Orange"
+}
 
 
