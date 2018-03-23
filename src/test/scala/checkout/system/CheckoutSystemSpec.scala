@@ -27,6 +27,16 @@ class CheckoutSystemSpec extends FlatSpec {
   "Given a basket eligible for a discount on oranges too" should "apply the discount " in {
     val newBasket = basket ::: List(orange, orange)
     CheckoutSystem.checkoutWithOffer(newBasket, Set(appleDiscount, orangeDiscount)) === (1.70: BigDecimal)
+  }
 
+  "Given a larger basket " should " apply the discount correctly " in {
+    val largerBasket = basket ::: List(orange, orange, orange, apple, apple)
+
+    //5 apples => 2 are on discount, has to pay 3
+    //4 oranges => 1 is on discount, has to pay 3
+
+    // 3 * 60 + 3 * 25 = 180 + 75 = 255 / 100 => 25.5 pounds
+
+    CheckoutSystem.checkoutWithOffer(largerBasket, Set(appleDiscount, orangeDiscount)) === (25.5: BigDecimal)
   }
 }

@@ -12,7 +12,7 @@ object CheckoutSystem {
     the total cost
     ● For example: [ Apple, Apple, Orange, Apple ] => £2.05
  */
-  def checkout(basket: List[BasketItem])(implicit round: Rounding): BigDecimal = {
+  def checkout(basket: List[BasketItem])(implicit round: Rounding = Rounding()): BigDecimal = {
     val basketPrice = basket.foldRight(BasketPrice())((curr, acc) => acc.add(curr))
 
     round.scale match {
@@ -34,12 +34,12 @@ object CheckoutSystem {
     def tryToApplyDiscount(item: (BasketItem, Amount), discounts: Set[Discount]): ItemsLeftToPayCount = {
       discounts find (_.item == item._1) match {
         case None => item._2
-        case Some(d) => d.applyOffer(item._2)
+        case Some(d) => d.applyDiscount(item._2)
       }
     }
 
     //needed so the discount can be applied easier
-    val itemsWithCount = basket.toSet.map((item: BasketItem)=> (item, basket.count(_ == item)))
+    val itemsWithCount = basket.toSet.map((item: BasketItem) => (item, basket.count(_ == item)))
 
     // maybe an useless optimization, but try not to fit every possible offer on every basket
     // some offers might not even be valid
